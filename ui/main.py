@@ -1,3 +1,4 @@
+from pathlib import Path
 from uic_ui import Ui_Main
 from PyQt6 import QtWidgets, QtGui
 import mods, jsonp
@@ -21,6 +22,9 @@ class MainUi(QtWidgets.QWidget, Ui_Main):
         self.ModList.view = QtWidgets.QWidget()
         self.ModList.VLayout = QtWidgets.QVBoxLayout(self.ModList.view)
         self.mod_list = []
+        if not Path(".\\mods.json").exists():
+            with open(Path(".\\mods.json"), encoding="utf-8", mode="w") as f:
+                f.write("[]")
         for mod in jsonp.jsonfile_to_obj(".\\mods.json", list[mods.Mod]):
             mod: mods.Mod
             print(mod.dumps())

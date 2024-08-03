@@ -165,3 +165,4 @@ main.dist/*
 
 # Test files
 mod_assets/
+mods.json
