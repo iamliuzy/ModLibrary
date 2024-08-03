@@ -162,3 +162,6 @@ cython_debug/
 # Nuitka
 main.build/*
 main.dist/*
+
+# Test files
+mod_assets/
