@@ -1,0 +1,2 @@
+winrt-Windows.UI
+winrt-Windows.UI.ViewManagement

@@ -1,0 +1,4 @@
+toml
+PyQt6
+PyQt6-Fluent-Widgets
+jsons
