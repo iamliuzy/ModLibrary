@@ -6,7 +6,12 @@
         {
             "label": "Run",
             "type": "shell",
-            "command": "python main.py"
+            "command": "python main.py",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         }
     ]
 }
