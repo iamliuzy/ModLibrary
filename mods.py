@@ -166,6 +166,3 @@ class Mod(JsonSerializable):
 
     def geticon(self) -> QIcon:
         return QIcon(str(Path("./mod_assets/%s/%s" % (self.id, self.iconame))))
-
-
-
