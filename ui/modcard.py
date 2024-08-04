@@ -17,14 +17,17 @@
 #
 # Contact the author: iamliuzy <liuzhiyu.sh@outlook.com>
 
-from qfluentwidgets import CardWidget
+from typing import Callable
+from qfluentwidgets import CardWidget, FluentIcon, RoundMenu, Action
 from uic_ui import Ui_ModCard
 from mods import Mod
 import constants as const
 class ModCard(CardWidget, Ui_ModCard):
-    def __init__(self, mod: Mod):
+    def __init__(self, mod: Mod, slot_deleteMod: Callable):
         super().__init__()
         self.setupUi(self)
+        self.mod = mod
+        self.slot_deleteMod = slot_deleteMod
         self.ModIcon.setIcon(mod.geticon())
         self.ModName.setText(mod.name)
         authors = ""
@@ -35,9 +38,20 @@ class ModCard(CardWidget, Ui_ModCard):
                 authors += author
             else:
                 if not i == authors_length - 1:
-                    authors += f"{author}, "
+                    authors += self.tr("%s, ", "comma") % author
                 else:
-                    authors += f"{const.tr("ModCard", "和")} {author}"
+                    authors += self.tr("和 %s") % author
         
+        authors = self.tr("作者：%s", n=authors_length) % authors
+
         self.ModAuthors.setText(authors)
         self.ModDesc.setText(mod.desc)
+        self.More.setIcon(FluentIcon(FluentIcon.MORE.value))
+        self.MoreMenu = RoundMenu()
+        self.MoreMenu.addAction(Action(self.tr("删除"), triggered=self.slot_delete))
+        self.More.setMenu(self.MoreMenu)
+        self.More.clicked.connect(self.More.showMenu)
+
+    def slot_delete(self):
+        self.slot_deleteMod(self)
+        self.deleteLater()

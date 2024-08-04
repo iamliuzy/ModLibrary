@@ -64,6 +64,9 @@
          <property name="text">
           <string notr="true"/>
          </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
        <item>
@@ -76,8 +79,8 @@
          </property>
          <property name="maximumSize">
           <size>
-           <width>20</width>
-           <height>20</height>
+           <width>30</width>
+           <height>30</height>
           </size>
          </property>
         </widget>

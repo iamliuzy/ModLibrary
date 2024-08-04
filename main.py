@@ -62,21 +62,13 @@ class MainWindow(qfw.MSFluentWindow):
         self.mw = ui.MainUi(self)
         self.addSubInterface(self.mw, qfw.FluentIcon.BOOK_SHELF, tr("Sidebar", "LIBRARY"))
 
-    def updateJson(self):
-        self.update_count += 1
-        print(f"Update Mod List Method Called: {self.update_count}")
-        print(self.mw.mod_list)
-        self.mw.ModList.view.deleteLater()
-        self.mw.ModList.view = QtWidgets.QWidget()
-        self.mw.ModList.VLayout = QtWidgets.QVBoxLayout(self.mw.ModList.view)
-        for mod in self.mw.mod_list:
-            self.mw.ModList.VLayout.addWidget(ui.ModCard(mod))
-        self.mw.ModList.setWidget(self.mw.ModList.view)
-        jsonp.obj_to_jsonfile(self.mw.mod_list, "mods.json")
+
 
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
+    if sys.platform == 'win32' and sys.getwindowsversion().build >= 22000:
+        app.setStyle("fusion")
 
     window = MainWindow()
     window.show()

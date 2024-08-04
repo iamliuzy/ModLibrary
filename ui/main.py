@@ -29,15 +29,15 @@ from .modcard import ModCard
 
 class MainUi(QtWidgets.QWidget, Ui_Main):
     mod_list: list[mods.Mod]
+    update_count = 0
     def __init__(self, mw: qfw.MSFluentWindow):
         super().__init__()
         self.setupUi(self)
-        self.mw = mw
         self.AddModButton.setIcon(qfw.FluentIcon.ADD)
         self.AddModButton.clicked.connect(self.slot_addMod)
         self.RefreshButton.setIcon(QtGui.QIcon.fromTheme(
             QtGui.QIcon.ThemeIcon.ViewRefresh))
-        self.RefreshButton.clicked.connect(mw.updateJson)
+        self.RefreshButton.clicked.connect(self.updateJson)
         self.ModList.view = QtWidgets.QWidget()
         self.ModList.VLayout = QtWidgets.QVBoxLayout(self.ModList.view)
         self.mod_list = []
@@ -48,7 +48,7 @@ class MainUi(QtWidgets.QWidget, Ui_Main):
             mod: mods.Mod
             print(mod.dumps())
             self.mod_list.append(mod)
-            self.ModList.VLayout.addWidget(ModCard(mod))
+            self.ModList.VLayout.addWidget(ModCard(mod, self.slot_deleteMod))
         self.ModList.setWidget(self.ModList.view)
 
     def slot_addMod(self):
@@ -58,4 +58,23 @@ class MainUi(QtWidgets.QWidget, Ui_Main):
                                                         filter=f"{tr("AddModDialog", "模组文件")} (*.jar)")[0]
         if not modpath == ".":
             self.mod_list.append(mods.Mod.parse_from_file(modpath))
-            self.mw.updateJson()
+            self.updateJson()
+            self.updateModList()
+
+    def updateJson(self):
+        self.update_count += 1
+        print(f"Update Mod List Method Called: {self.update_count}")
+        print(self.mod_list)
+        jsonp.obj_to_jsonfile(self.mod_list, "mods.json")
+    
+    def slot_deleteMod(self, mod: ModCard):
+        self.mod_list.remove(mod.mod)
+        self.updateJson()
+
+    def updateModList(self):
+        self.ModList.view.deleteLater()
+        self.ModList.view = QtWidgets.QWidget()
+        self.ModList.VLayout = QtWidgets.QVBoxLayout(self.ModList.view)
+        for mod in self.mod_list:
+            self.ModList.VLayout.addWidget(ModCard(mod, self.slot_deleteMod))
+        self.ModList.setWidget(self.ModList.view)
