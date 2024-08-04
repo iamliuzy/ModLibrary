@@ -22,6 +22,8 @@ from qfluentwidgets import CardWidget, FluentIcon, RoundMenu, Action
 from uic_ui import Ui_ModCard
 from mods import Mod
 import constants as const
+
+
 class ModCard(CardWidget, Ui_ModCard):
     def __init__(self, mod: Mod, slot_deleteMod: Callable):
         super().__init__()
@@ -41,7 +43,7 @@ class ModCard(CardWidget, Ui_ModCard):
                     authors += self.tr("%s, ", "comma") % author
                 else:
                     authors += self.tr("和 %s") % author
-        
+
         authors = self.tr("作者：%s", n=authors_length) % authors
 
         self.ModAuthors.setText(authors)
